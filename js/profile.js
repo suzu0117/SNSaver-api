@@ -14,6 +14,11 @@ export async function getProfile(username) {
             },
         },
     );
+    console.log({
+    appId: process.env.IG_APP_ID,
+    cookie: process.env.IG_COOKIE ? "exists" : "missing",
+    userAgent: process.env.IG_USER_AGENT ? "exists" : "missing"
+});
     console.log(response.status);
     console.log(response.data);
     if (!response.ok) {
