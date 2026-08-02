@@ -6,6 +6,7 @@ const router = express.Router();
 let running = false;
 
 router.post("/search", async (req, res) => {
+    console.log("search route hit");
     try {
         const username = await req.body.username;
 
