@@ -11,6 +11,7 @@ router.post("/search", async (req, res) => {
         const username = await req.body.username;
 
         const data = await downloadReception(username);
+        console.log("downloadReception result:", data);
 
         if (!data) {
             return res.status(404).json({
