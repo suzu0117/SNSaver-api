@@ -8,7 +8,6 @@ export async function getProfile(username) {
         {
             headers: {
                 "x-ig-app-id": process.env.IG_APP_ID,
-                "cookie": process.env.IG_COOKIE,
                 "user-agent": process.env.IG_USER_AGENT,
                 "referer": `https://www.instagram.com/${username}/`,
                 "accept": "application/json",
