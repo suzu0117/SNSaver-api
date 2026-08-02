@@ -22,7 +22,7 @@ export async function getProfile(username) {
 });
 
 console.log("status:", response.status);
-
+console.log(Object.fromEntries(response.headers));
 const text = await response.text();
 console.log("response:", text.slice(0, 500));
     
