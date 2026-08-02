@@ -13,6 +13,11 @@ app.use(express.json());
 app.use("/profileimage", express.static("profileimage"));
 app.use("/temp", express.static("temp"));
 
+app.use((req, res, next) => {
+    console.log(req.method, req.url);
+    next();
+});
+
 app.use("/api", router);
 
 app.listen(PORT, () => {
