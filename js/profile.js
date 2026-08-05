@@ -41,6 +41,7 @@ export async function getProfile(username) {
 }
 
 async function profileImage(username, url) {
+    fs.mkdirSync("./profileimage/", { recursive: true });
     const filePath = `./profileimage/${username}.jpg`;
 
     const file = fs.createWriteStream(filePath);
