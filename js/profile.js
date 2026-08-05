@@ -8,27 +8,13 @@ export async function getProfile(username) {
         {
             headers: {
                 "x-ig-app-id": process.env.IG_APP_ID,
-                cookie: process.env.IG_COOKIE,
+                /*cookie: process.env.IG_COOKIE,*/
                 "user-agent": process.env.IG_USER_AGENT,
                 referer: `https://www.instagram.com/${username}/`,
             },
         },
     );
-    
-    console.log({
-    appId: process.env.IG_APP_ID,
-    cookie: process.env.IG_COOKIE ? "exists" : "missing",
-    userAgent: process.env.IG_USER_AGENT ? "exists" : "missing"
-});
 
-console.log("status:", response.status);
-console.log(Object.fromEntries(response.headers));
-const text = await response.text();
-console.log("response:", text.slice(0, 500));
-    
-    console.log(response.status);
-    console.log(response.data);
-    
     if (!response.ok) {
         return null;
     }
@@ -55,8 +41,6 @@ console.log("response:", text.slice(0, 500));
 }
 
 async function profileImage(username, url) {
-    fs.mkdirSync("./profileimage", { recursive: true });
-
     const filePath = `./profileimage/${username}.jpg`;
 
     const file = fs.createWriteStream(filePath);
