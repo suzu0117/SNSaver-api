@@ -5,16 +5,11 @@ import { router } from "./js/router.js";
 import path from "path";
 
 const app = express();
-
-app.use("/profileimage", (req, res, next) => {
-    console.log(req.url);
-    next();
-});
-app.use("/profileimage", express.static("profileimage"));
-app.use("/temp", express.static("temp"));
 app.use(express.json());
 app.use(cors());
 
+app.use("/profileimage", express.static("profileimage"));
+app.use("/temp", express.static("temp"));
 app.use("/api", router);
 
 const PORT = process.env.PORT || 3001;
