@@ -27,6 +27,6 @@ export async function createZipFile(tempFolder, id) {
 
     await finished;
 
-    const baseUrl = process.env.BASE_URL ?? "http://localhost:3000";
+    const baseUrl = process.env.BASE_URL ?? "http://localhost:3001";
     return `${baseUrl}/temp/${id}.zip`;
 }

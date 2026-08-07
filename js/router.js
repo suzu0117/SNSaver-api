@@ -8,47 +8,54 @@ let running = false;
 router.post("/search", async (req, res) => {
     try {
         const username = await req.body.username;
-
         const data = await downloadReception(username);
-
         if (!data) {
             return res.status(404).json({
                 message: "user not found",
+                data: null,
             });
         }
-
         res.json({
-            data,
             message: "success",
+            data,
         });
     } catch (error) {
         console.error(error);
-
         res.status(500).json({
             message: "internal server error",
+            data: null,
         });
     }
 });
 
 router.get("/status/:id", async (req, res) => {
-    const id = req.params.id;
-    const data = await checkStatus(id);
-    if (!data) {
-        return;
-    }
+    try {
+        const id = req.params.id;
+        const data = await checkStatus(id);
 
-    const status = data.STATUS;
-    if (!status) {
-        return res.status(404).json({
-            message: "id not found",
+        const status = data.STATUS;
+        if (!status) {
+            return res.status(404).json({
+                message: "id not found",
+                status: null,
+                url: null,
+            });
+        }
+
+        const url = data.URL;
+        res.json({
+            message: "success",
+            status: status,
+            url: url,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "internal server error",
+            status: null,
+            url: null,
         });
     }
-
-    const url = data.URL;
-    res.json({
-        status: status,
-        url: url,
-    });
 });
 
 export { router };

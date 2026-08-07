@@ -14,7 +14,7 @@ export async function getProfile(username) {
             },
         },
     );
-
+    console.log(response.status)
     if (!response.ok) {
         return null;
     }
@@ -61,6 +61,6 @@ async function profileImage(username, url) {
         file.on("error", reject);
     });
 
-    const baseUrl = process.env.BASE_URL ?? "http://localhost:3000";
+    const baseUrl = process.env.BASE_URL ?? "http://localhost:3001";
     return `${baseUrl}/profileimage/${username}.jpg`;
 }
