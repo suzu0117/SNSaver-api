@@ -1,7 +1,7 @@
 /*----------------------------------------初期設定----------------------------------------*/
 import fs from "fs";
 import { ZipArchive } from "archiver";
-
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 /*----------------------------------------関数----------------------------------------*/
 export function createTempFolder(id, username) {
     const tempFolder = `./temp/${id}/${username}`;
@@ -26,7 +26,5 @@ export async function createZipFile(tempFolder, id) {
     archive.finalize();
 
     await finished;
-
-    const baseUrl = process.env.BASE_URL ?? "http://localhost:3001";
-    return `${baseUrl}/temp/${id}.zip`;
+    return fileName;
 }

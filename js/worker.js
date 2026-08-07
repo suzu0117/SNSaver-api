@@ -8,7 +8,7 @@ import {
 import { getPosts } from "./posts.js";
 import { downloadFiles } from "./download.js";
 import { createTempFolder, createZipFile } from "./filemanager.js";
-
+import { uploadFileToR2, createSignedUrl } from "./R2manager.js";
 /*----------------------------------------処理開始----------------------------------------*/
 let running = false;
 
@@ -44,8 +44,10 @@ async function processJob(id, username) {
         const tempFolder = createTempFolder(id, username);
 
         await downloadFiles(posts, tempFolder);
-        const url = await createZipFile(tempFolder, id);
-
+        const filePath = await createZipFile(tempFolder, id);
+        const objectKey = `temp/${id}.zip`;
+        await uploadFileToR2(filePath, objectKey, "application/zip");
+        const url = await createSignedUrl(objectKey);
         updateStatusToCompleted(id, url);
     } catch (error) {
         console.log(error.message);

@@ -14,7 +14,7 @@ export async function getProfile(username) {
             },
         },
     );
-    console.log(response.status)
+
     if (!response.ok) {
         return null;
     }
@@ -29,18 +29,18 @@ export async function getProfile(username) {
     if (!user) {
         return;
     }
-    const url = await profileImage(username, user.profile_pic_url_hd);
+
     return {
         username: user.username,
         full_name: user.full_name,
         id: user.id,
         count: user.edge_owner_to_timeline_media.count,
         is_private: user.is_private,
-        url: url,
+        profile_pic_url_hd: user.profile_pic_url_hd,
     };
 }
 
-async function profileImage(username, url) {
+export async function downloadProfileImage(username, url) {
     fs.mkdirSync("./profileimage/", { recursive: true });
     const filePath = `./profileimage/${username}.jpg`;
 
@@ -61,6 +61,5 @@ async function profileImage(username, url) {
         file.on("error", reject);
     });
 
-    const baseUrl = process.env.BASE_URL ?? "http://localhost:3001";
-    return `${baseUrl}/profileimage/${username}.jpg`;
+    return filePath;
 }
