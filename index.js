@@ -19,20 +19,16 @@ app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
 
-export const r2 = new S3Client({
-    region: "auto",
-    endpoint: process.env.R2_ENDPOINT,
-    credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY,
-        secretAccessKey: process.env.R2_SECRET_KEY,
-    },
-});
+const publicApi = "https://snsaver-render-api.onrender.com";
 
-await r2.send(
-    new PutObjectCommand({
-        Bucket: process.env.R2_BUCKET,
-        Key: "profileimage/athome_meraru.jpg",
-        Body: fs.createReadStream("./profileimage/athome_meraru.jpg"),
-        ContentType: "image/jpeg",
-    })
-);
+async function keepPublicApiRunning(publicApi) {
+    try {
+        const response = await fetch(`${publicApi}/health`);
+        console.log(`Render health check: ${response.status}`);
+    } catch (error) {
+        console.error("Render health check failed:", error);
+    }
+}
+
+keepPublicApiRunning(publicApi);
+setInterval(() => keepPublicApiRunning(publicApi), 5 * 60 * 1000);
