@@ -1,6 +1,7 @@
 import "dotenv/config";
 import axios from "axios";
 import fs from "fs";
+import { errorLogInsert } from "./database.js";
 
 export async function getProfile(username) {
     const response = await fetch(
@@ -16,12 +17,15 @@ export async function getProfile(username) {
     );
 
     if (!response.ok) {
-        console.log(response);
+        const errorLog = `getProfile(${username}):${response.status}`;
+        errorLogInsert(errorLog);
         return null;
     }
 
     const contentType = response.headers.get("content-type");
     if (!contentType?.includes("application/json")) {
+        const errorLog = `getProfile(${username}):${contentType}`;
+        errorLogInsert(errorLog);
         return null;
     }
 

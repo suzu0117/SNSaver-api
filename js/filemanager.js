@@ -9,10 +9,10 @@ export function createTempFolder(id, username) {
     return tempFolder;
 }
 
-export async function createZipFile(tempFolder, id) {
+export async function createZipFile(tempFolder, id, username) {
     console.log("ziped");
     const archive = new ZipArchive();
-    const fileName = `./temp/${id}.zip`;
+    const fileName = `./temp/${id}/${username}.zip`;
     const file = fs.createWriteStream(fileName);
 
     const finished = new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ export async function createZipFile(tempFolder, id) {
     });
 
     archive.pipe(file);
-    archive.directory(`./temp/${id}`, false);
+    archive.directory(`./temp/${id}/${username}`, false);
     archive.finalize();
 
     await finished;

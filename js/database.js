@@ -108,3 +108,19 @@ export async function checkStatus(id) {
         )
     ).rows[0];
 }
+
+export async function errorLogInsert(errorLog) {
+    await pool.query(
+        `
+        INSERT INTO "ERROR_LOG"
+        (
+            "ERROR_LOG"
+        )
+        VALUES
+        (
+            $1
+        )
+        `,
+        [errorLog],
+    );
+}

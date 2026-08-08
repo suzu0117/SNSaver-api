@@ -44,8 +44,8 @@ async function processJob(id, username) {
         const tempFolder = createTempFolder(id, username);
 
         await downloadFiles(posts, tempFolder);
-        const filePath = await createZipFile(tempFolder, id);
-        const objectKey = `temp/${id}.zip`;
+        const filePath = await createZipFile(tempFolder, id, username);
+        const objectKey = `temp/${id}/${username}.zip`;
         await uploadFileToR2(filePath, objectKey, "application/zip");
         const url = await createSignedUrl(objectKey);
         updateStatusToCompleted(id, url);
