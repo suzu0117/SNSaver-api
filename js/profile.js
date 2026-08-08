@@ -16,6 +16,7 @@ export async function getProfile(username) {
     );
 
     if (!response.ok) {
+        console.log(response);
         return null;
     }
 
