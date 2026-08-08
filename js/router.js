@@ -8,16 +8,31 @@ let running = false;
 router.post("/search", async (req, res) => {
     try {
         const username = await req.body.username;
-        const data = await downloadReception(username);
-        if (!data) {
+        const response = await downloadReception(username);
+        if (response.status === 401) {
+            return res.status(401).json({
+                message: `An error occurred on our service.<br>Please contact us through the inquiry form and mention error code <span class=error-code>401</span>.`,
+                data: null,
+            });
+        }
+
+        if (response.status === 429) {
+            return res.status(429).json({
+                message: `An error occurred on our service.<br>Please contact us through the inquiry form and mention error code <span class=error-code>429</span>.`,
+                data: null,
+            });
+        }
+
+        if (!response.data.profile) {
             return res.status(404).json({
                 message: "user not found",
                 data: null,
             });
         }
+
         res.json({
             message: "success",
-            data,
+            data: response.data,
         });
     } catch (error) {
         console.error(error);

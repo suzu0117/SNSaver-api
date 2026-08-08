@@ -9,17 +9,19 @@ export async function getProfile(username) {
         {
             headers: {
                 "x-ig-app-id": process.env.IG_APP_ID,
-                /*cookie: process.env.IG_COOKIE,*/
+                cookie: process.env.IG_COOKIE,
                 "user-agent": process.env.IG_USER_AGENT,
                 referer: `https://www.instagram.com/${username}/`,
             },
         },
     );
-
     if (!response.ok) {
         const errorLog = `getProfile(${username}):${response.status}`;
         errorLogInsert(errorLog);
-        return null;
+        return {
+            status: response.status,
+            profile: null,
+        };
     }
 
     const contentType = response.headers.get("content-type");
@@ -36,12 +38,15 @@ export async function getProfile(username) {
     }
 
     return {
-        username: user.username,
-        full_name: user.full_name,
-        id: user.id,
-        count: user.edge_owner_to_timeline_media.count,
-        is_private: user.is_private,
-        profile_pic_url_hd: user.profile_pic_url_hd,
+        status: 200,
+        profile: {
+            username: user.username,
+            full_name: user.full_name,
+            id: user.id,
+            count: user.edge_owner_to_timeline_media.count,
+            is_private: user.is_private,
+            profile_pic_url_hd: user.profile_pic_url_hd,
+        },
     };
 }
 

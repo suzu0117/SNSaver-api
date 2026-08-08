@@ -7,10 +7,20 @@ import { bootWorker } from "./worker.js";
 import { uploadFileToR2, createSignedUrl } from "./R2manager.js";
 /*----------------------------------------関数----------------------------------------*/
 export async function downloadReception(username) {
-    const profile = await getProfile(username);
-    if (!profile) {
-        return;
+    const response = await getProfile(username);
+
+    if (response.status !== 200) {
+        console.log(response.status);
+        return {
+            status: response.status,
+            data: {
+                id: null,
+                profile: null,
+                url: null,
+            },
+        };
     }
+    const profile = response.profile;
 
     const filePath = await downloadProfileImage(
         profile.username,
@@ -22,9 +32,12 @@ export async function downloadReception(username) {
 
     if (profile.is_private) {
         return {
-            id: null,
-            profile: profile,
-            url: url,
+            status: profile.status,
+            data: {
+                id: null,
+                profile: profile,
+                url: url,
+            },
         };
     }
 
@@ -32,8 +45,11 @@ export async function downloadReception(username) {
     await insertQueue(id, username);
     bootWorker();
     return {
-        id: id,
-        profile: profile,
-        url: url,
+        status: profile.status,
+        data: {
+            id: id,
+            profile: profile,
+            url: url,
+        },
     };
 }
